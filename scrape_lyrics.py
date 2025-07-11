@@ -3,58 +3,58 @@ import requests
 import pandas as pd
 from tqdm import tqdm
 
-# Crie uma sessão
+# Create a session for persistent requests
 session = requests.Session()
 
-# Artista escolhido (Mude o nome do artista de acordo com sua preferência)
+# Set the artist name (change this to target a different artist)
 artist_name = "taylor-swift"
 
-# URL do artista
-artist_url = f'https://www.letras.mus.br/{artist_name}/'
+# Build the artist URL
+artist_url = f"https://www.letras.mus.br/{artist_name}/"
 
-# Faça a requisição inicial para obter a lista de músicas
+# Request the artist page and parse it
 response = session.get(artist_url)
-soup = BeautifulSoup(response.content, 'lxml')
+soup = BeautifulSoup(response.content, "lxml")
 
-# Encontrar todas as músicas
-song_links = [tag['href'] for tag in soup.find_all('a', {'class': 'songList-table-songName'})]
+# Extract all song links from the artist page
+song_links = [tag["href"] for tag in soup.find_all("a", class_="songList-table-songName")]
 
-# Lista para armazenar as informações raspadas
+# List to hold all scraped data
 scraped_data = []
 
-# Loop para cada música
-for song_link in tqdm(song_links):
-    song_url = f'https://www.letras.mus.br{song_link}'
+# Loop through each song link and collect metadata
+for song_link in tqdm(song_links, desc="Scraping lyrics"):
+    song_url = f"https://www.letras.mus.br{song_link}"
     song_response = session.get(song_url)
-    song_soup = BeautifulSoup(song_response.content, 'lxml')
-    
+    song_soup = BeautifulSoup(song_response.content, "lxml")
+
     try:
-        title = song_soup.find('h1', {'class': 'head-title'}).text.strip()
-        lyrics = song_soup.find('div', {'class': 'lyric-original'}).text.strip()
-        views_tag = song_soup.find('div', {'class': 'head-info-exib'}).find('b')
-        views = int(views_tag.text.strip().replace('.', '').replace(',', '')) if views_tag else 0
+        title = song_soup.find("h1", class_="head-title").text.strip()
+        lyrics = song_soup.find("div", class_="lyric-original").text.strip()
 
-        song_data = {
-            'Title': title,
-            'Lyrics': lyrics,
-            'Link': song_url,
-            'Artist': artist_name,
-            'Views': views
-        }
+        views_tag = song_soup.find("div", class_="head-info-exib")
+        views = 0
+        if views_tag and views_tag.find("b"):
+            views = int(views_tag.find("b").text.strip().replace(".", "").replace(",", ""))
 
-        scraped_data.append(song_data)
+        scraped_data.append({
+            "Title": title,
+            "Lyrics": lyrics,
+            "Link": song_url,
+            "Artist": artist_name,
+            "Views": views
+        })
 
     except AttributeError:
-        print(f"Algum atributo não foi encontrado na página: {song_url}")
+        print(f"[!] Missing data on page: {song_url}")
 
-# Crie um DataFrame com os dados raspados
+# Create DataFrame
 df = pd.DataFrame(scraped_data)
 
-# Remova duplicatas
+# Drop duplicates
 df.drop_duplicates(inplace=True)
 
-# Salve o DataFrame em um arquivo Excel
-excel_filename = f"{artist_name}_musicas.xlsx"
+# Export to Excel
+excel_filename = f"{artist_name}_lyrics.xlsx"
 df.to_excel(excel_filename, index=False)
-print(f"Arquivo '{excel_filename}' salvo com sucesso.")
-
+print(f"[✓] Lyrics saved to '{excel_filename}'")
