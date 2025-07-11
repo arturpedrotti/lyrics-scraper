@@ -1,57 +1,72 @@
-# 🎵 Raspa Letras de Música 🎶
+# 🎵 Song Lyrics Scraper 🎶
 
-## Índice
+## 📋 Table of Contents
 
-1. [Visão Geral](#visão-geral)
-2. [Instalação](#instalação)
-3. [Uso](#uso)
-4. [Funcionalidades](#funcionalidades)
-5. [Autores](#autores)
-6. [Agradecimentos](#agradecimentos)
-
----
-
-## 🎤 Visão Geral
-
-Este programa foi desenvolvido para raspar letras e dados relacionados de um determinado artista do site Letras.mus.br. Com ele, você não só pode ler as letras de todas as suas músicas favoritas, mas também coletar dados analíticos, como o número de visualizações que cada música recebeu. Perfeito para entusiastas da música e amantes de dados!
+1. [Overview](#overview)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [Features](#features)
+5. [Author](#author)
+6. [Acknowledgments](#acknowledgments)
 
 ---
 
-## 🎸 Instalação
+## 🎤 Overview
 
-Para executar este programa, você precisará ter Python 3.x instalado em seu sistema. Além disso, as seguintes bibliotecas Python são necessárias:
+This project is a Python-based tool that scrapes song lyrics and metadata from [Letras.mus.br](https://www.letras.mus.br/). It allows users to:
 
-- BeautifulSoup4
-- Requests
-- Pandas
+- Fetch all lyrics from a specific artist
+- Collect the number of views for each song
+- Export the results to an Excel file
 
-Instale as bibliotecas usando pip:
+It's a simple and powerful utility for music enthusiasts and data nerds.
 
-\`\`\`bash
+---
+
+## ⚙️ Installation
+
+Make sure you have **Python 3.x** installed.
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 ---
 
-## 🎹 Uso
+## 🚀 Usage
 
-Para usar o programa, execute o arquivo `casoletras.py`. Note que você pode alterar o nome do artista diretamente no código. Basta procurar a variável `artistName` e inserir o nome do artista de sua escolha.
+Run the script:
 
-\`\`\`bash
-python3 casoletras.py
-\`\`\`
+```bash
+python3 scrape_lyrics.py
+```
+
+To scrape lyrics for a different artist, edit the `artist_name` variable inside the script:
+
+```python
+artist_name = "your-artist-name"
+```
+
+Use the URL-friendly version of the artist's name as it appears on [letras.mus.br](https://www.letras.mus.br/).
 
 ---
 
-## 🎻 Funcionalidades
+## ✨ Features
 
-- Raspagem de todas as letras de um artista
-- Coleta de número de visualizações
-- Exporta dados para um arquivo Excel
+- Scrapes lyrics and metadata for all songs by a given artist
+- Collects total view count per song
+- Exports clean, deduplicated data to an Excel file
 
 ---
 
-## 🎷 Agradecimentos
+## 👤 Author
 
-Um agradecimento especial ao Professor Matheus Pestana
+- [@arturpedrotti](https://github.com/arturpedrotti)
 
+---
+
+## 🙏 Acknowledgments
+
+Special thanks to [@mateuspestana](https://github.com/mateuspestana) for the original inspiration and guidance on this project.
